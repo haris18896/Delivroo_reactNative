@@ -131,3 +131,21 @@ export default function App() {
   )
 }
 ```
+
+---
+---
+
+To change the top bar we will use `useNavigation` from react-native in the `useLayoutEffect` which renders the code as soon as the page loads.
+
+we can also remove the top bar, and can use `useLayoutEffect` to change it.
+
+```js
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      // headerTitle: 'Testing',
+      headerShown: false
+    })
+  })
+  ```
+
+  on `headerShown: false` we should use `SafeAreaView` from 'react-native' components. so that what ever we code, we do that in the safe area.
