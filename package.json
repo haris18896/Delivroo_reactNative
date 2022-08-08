@@ -13,6 +13,7 @@
     "@babel/plugin-transform-react-jsx": "^7.18.10",
     "@react-navigation/native": "^6.0.11",
     "@react-navigation/native-stack": "^6.7.0",
+    "@reduxjs/toolkit": "^1.8.3",
     "@sanity/client": "^3.3.3",
     "@sanity/image-url": "^1.0.1",
     "expo": "~45.0.0",
@@ -27,6 +28,7 @@
     "react-native-screens": "~3.11.1",
     "react-native-svg": "^12.4.3",
     "react-native-web": "0.17.7",
+    "react-redux": "^8.0.2",
     "tailwindcss-react-native": "^1.7.10"
   },
   "devDependencies": {

@@ -3,10 +3,12 @@ import * as Icons from 'react-native-heroicons/solid'
 import { View, Text, ScrollView, ActivityIndicator } from 'react-native'
 import RestaurantCard from '../restaurantCard/RestaurantCard'
 import sanityClient from '../../sanity'
+import { useNavigation } from '@react-navigation/native'
 
 const FeaturedRow = ({ id, title, description }) => {
   const [loading, setLoading] = useState(false)
   const [restaurants, setRestaurants] = useState([])
+  const navigation = useNavigation()
 
   useEffect(() => {
     setLoading(true)
