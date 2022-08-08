@@ -18,7 +18,6 @@ const DishRow = ({ id, name, description, price, image }) => {
 
   const removeItemsFromBasket = () => {
     if (!items.length > 0) return
-
     dispatch(removeFromBasket({ id }))
   }
 
@@ -36,7 +35,7 @@ const DishRow = ({ id, name, description, price, image }) => {
               value={price}
               displayType={'text'}
               thousandSeparator={true}
-              suffix={'  GBP'}
+              prefix={'£ '}
               renderText={value => <Text className='text-gray-400 mt-2'>{value}</Text>}
             />
           </View>
