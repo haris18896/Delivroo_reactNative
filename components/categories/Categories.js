@@ -1,8 +1,20 @@
-import { View, Text, ScrollView } from 'react-native'
+import { View, ActivityIndicator, ScrollView } from 'react-native'
 import React from 'react'
 import CategoryCard from './CategoryCard'
+import sanityClient, { urlFor } from '../../sanity'
 
 const Categories = () => {
+  const [categories, setCategories] = React.useState([])
+  const [loading, setLoading] = React.useState(false)
+
+  React.useEffect(() => {
+    setLoading(true)
+    sanityClient.fetch(`*[_type == 'category']`).then(data => {
+      setCategories(data)
+      setLoading(false)
+    })
+  }, [])
+
   return (
     <ScrollView
       horizontal
@@ -12,14 +24,15 @@ const Categories = () => {
         paddingTop: 10,
       }}
     >
-      <CategoryCard imgUrl='https://links.papareact.com/gn7' title='Testing 1' />
-      <CategoryCard imgUrl='https://links.papareact.com/gn7' title='Testing 2' />
-      <CategoryCard imgUrl='https://links.papareact.com/gn7' title='Testing 3' />
-      <CategoryCard imgUrl='https://links.papareact.com/gn7' title='Testing 4' />
-      <CategoryCard imgUrl='https://links.papareact.com/gn7' title='Testing 5' />
-      <CategoryCard imgUrl='https://links.papareact.com/gn7' title='Testing 6' />
-      <CategoryCard imgUrl='https://links.papareact.com/gn7' title='Testing 7' />
-      <CategoryCard imgUrl='https://links.papareact.com/gn7' title='Testing 8' />
+      {loading ? (
+        <View className='flex-1 mt-3 justify-center items-center'>
+          <ActivityIndicator size='large' color='#00ccbb' />
+        </View>
+      ) : (
+        categories?.map(category => (
+          <CategoryCard key={category?._id} imgUrl={urlFor(category?.image).width(200).url()} title={category?.name} />
+        ))
+      )}
     </ScrollView>
   )
 }

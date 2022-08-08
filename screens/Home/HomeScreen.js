@@ -42,7 +42,7 @@ const HomeScreen = () => {
     <SafeAreaView className='pt-10 bg-white'>
       <Header />
 
-      <ScrollView className='bg-gray-100' contentContainerStyle={{ paddingBottom: 100 }}>
+      <ScrollView className='bg-gray-100' contentContainerStyle={{ paddingBottom: 135 }}>
         <Categories />
         {loading ? (
           <View className='flex-1 mt-10 justify-center items-center'>

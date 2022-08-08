@@ -30,7 +30,7 @@ const FeaturedRow = ({ id, title, description }) => {
         setRestaurants(data?.restaurant)
         setLoading(false)
       })
-  }, [])
+  }, [id])
 
   return (
     <View>
