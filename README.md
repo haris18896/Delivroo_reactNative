@@ -1,208 +1,95 @@
-# Delivroo_reactNative : Sanity Integration
+# Delivroo_reactNative : Connecting Sanity to our Front End
 
-Now we are going to add Sanity to our app.
-
-[Sanity](https://snaity.io/sonny) is a platform that allows us to create and manage content.
+Now we are going to Integrate our Sanity backend to our front end app. and for that we are going to install `Sanity-client`
 
 ```
-npm install -g @sanity/cli
-sanity init --coupon sonny2022
+npm i @sanity/client @sanity/image-url
 ```
 
-after that it will ask us some question which are answered below
+after installing the above dependencies we are going to create `sanity.js` file at the root level. here is all the magic happens.
+
+also add `cors police` to your app, which can be done
 
 ```
-? Project name: delivroo_reactnative
-? Use the default dataset configuration? Yes
-? Project output path: sanity
-? Select project template Blog (schema)
-```
+cd sanity
+sanity cors add http://localhost:3000
+``` 
 
-after that it will be installing packages and dependencies, also take a look at the output. if you want to install dependencies in the sanity then do change the directory because sanity has it's own `package.json` file.
-
-after all the dependencies installed we will get a UI to manage.
-
-after that Login to sanity, and there you will see your sanity project.
-
-after that `cd sanity` change directory to sanity and start it `sanity start`
-
-in the sanity directory you will see a `Schemas` directory. where all the schemas for our data base will be present, and each schema has it's own file.
-
-Now we are going to make a schema. the first thing we are going to make is `RestaurantSchema` for that go to the schemas directory and edit the blog schemas as you want.
-
-here we are going to change the `post` schema to `Restaurant` schema.
+or you can add it by going to the [sanityAPI](https://www.sanity.io/manage/personal/project/voaq66f7/api)
 
 ```js
-// restaurantSchema
-export default {
-  name: 'restaurant',
-  title: 'Restaurant',
-  type: 'document',
-  fields: [
-    {
-      name: 'name',
-      type: 'string',
-      title: 'Restaurant Name',
-      validation: Rule => Rule.required(),
-    },
-    {
-      name: 'short_description',
-      type: 'string',
-      title: 'Short Description',
-      validation: Rule => Rule.max(200),
-    },
-    {
-      name: 'image',
-      type: 'image',
-      title: 'Image of the Restaurant',
-    },
-    {
-      name: 'lat',
-      type: 'number',
-      title: 'Latitude of the Restaurant',
-    },
-    {
-      name: 'long',
-      type: 'number',
-      title: 'Longitude of the Restaurant',
-    },
-    {
-      name: 'address',
-      type: 'string',
-      title: 'Address of the Restaurant',
-      validation: Rule => Rule.required(),
-    },
-    {
-      name: 'rating',
-      type: 'number',
-      title: 'Enter a rating for the form (1-5 stars)',
-      validation: Rule => Rule.required().min(1).max(5).error('Please enter a value between 1 and 5'),
-    },
-    {
-      name: 'type',
-      type: 'reference',
-      title: 'Category',
-      validation: Rule => Rule.required(),
-      to: [{ type: 'category' }],
-    },
-    {
-      name: 'dishes',
-      type: 'array',
-      title: 'Dishes',
-      of: [{ type: 'reference', to: [{ type: 'dish' }] }],
-    },
-  ],
-}
+// sanity.js
+import sanityClient from '@sanity/client'
+import imageUrlBuilder from '@sanity/image-url'
 
-```
-
-```js
-// category Schema
-export default {
-  name: 'category',
-  title: 'Menu Category',
-  type: 'document',
-  fields: [
-    {
-      name: 'name',
-      type: 'string',
-      title: 'Category Name',
-      validation: Rule => Rule.required(),
-    },
-    {
-      name: 'image',
-      type: 'image',
-      title: 'Image of the category',
-    },
-  ],
-}
-
-```
-
-```js
-// dish Schema
-export default {
-  name: 'dish',
-  title: 'Dish',
-  type: 'document',
-  fields: [
-    {
-      name: 'name',
-      type: 'string',
-      title: 'Name of the Dish',
-      validation: Rule => Rule.required(),
-    },
-    {
-      name: 'short_description',
-      type: 'string',
-      title: 'Short Description',
-      validation: Rule => Rule.max(200),
-    },
-    {
-      name: 'image',
-      type: 'image',
-      title: 'Image of the Dish',
-    },
-    {
-      name: 'price',
-      type: 'number',
-      title: 'Price of the Dish in GBP',
-    },
-  ],
-}
-```
-
-```js
-// Featured Schema
-export default {
-  name: 'featured',
-  title: 'Featured Menu Categories',
-  type: 'document',
-  fields: [
-    {
-      name: 'name',
-      type: 'string',
-      title: 'Category Name',
-      validation: Rule => Rule.required(),
-    },
-    {
-      name: 'short_description',
-      type: 'string',
-      title: 'Short Description',
-      validation: Rule => Rule.max(200),
-    },
-    {
-      name: 'restaurant',
-      type: 'array',
-      title: 'Restaurant',
-      of: [{ type: 'reference', to: [{ type: 'restaurant' }] }],
-    },
-  ],
-}
-
-```
-
-```js
-// schema.js
-// First, we must import the schema creator
-import createSchema from 'part:@sanity/base/schema-creator'
-
-// Then import schema types from any plugins that might expose them
-import schemaTypes from 'all:part:@sanity/base/schema-type'
-
-// We import object and document schemas
-import category from './category'
-import restaurant from './restaurant'
-import dish from './dish'
-import featured from './featured'
-
-export default createSchema({
-  name: 'default',
-  types: schemaTypes.concat([restaurant, dish, category, featured]),
+const client = sanityClient({
+  projectId: 'voaq66f7',
+  dataset: 'production',
+  useCdn: true,
+  apiVersion: '2021-10-21',
 })
 
+const builder = imageUrlBuilder(client)
+export const urlFor = source => builder.image(source)
+
+export default client
 ```
 
-* To start the Sanity Server `sanity start`
+# Deploying Sanity
 
-after starting the server we are going to add all the data in the dataTable and after that we will be integrating this backend to our front end.
+To deploy sanity, it's really easy `sanity deploy`
+
+* then it will ask the following questions.
+
+* * Studio hostname (<value>.sanity.studio): delivrooreactnative
+> Success! Studio deployed to https://delivrooreactnative.sanity.studio/
+> 
+> Now I can login to this backend cms from anywhere in the world.
+> 
+> if you make any changes to your backend then you will have to redeploy the studio again.
+
+---
+---
+
+# Query Information form sanity backend
+
+go to the vision tab in localhost:3333 for sanity to check the queries.
+
+To pull information form Sanity we are going to use Grock syntax.
+
+Grock is similar to GraphQL syntax.
+in this you say what you want, and you only specify the fields you want it will give you back the information.
+
+```sql
+*[_type == 'featured'] {
+  ...
+}
+```
+
+the above query will fetch everything from the `featured`.
+
+```sql
+*[_type == 'featured'] {
+  ...,
+  restaurant[] -> {
+    ...,
+    dishes[]->,
+    type-> {
+      name
+    }
+    
+  }
+}[0]
+```
+
+to see the images from the sanity, pass the image to the url builder of sanity
+```js
+// sanity.js
+const builder = imageUrlBuilder(client)
+export const urlFor = source => builder.image(source)
+```
+
+```js
+// anywhere in the app, where sanity image url is being used
+      <Image source={{ uri: urlFor(imgUrl).url }} className='h-36 w-64 rounded-md' />
+```

@@ -1,9 +1,37 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import * as Icons from 'react-native-heroicons/solid'
-import { View, Text, ScrollView } from 'react-native'
+import { View, Text, ScrollView, ActivityIndicator } from 'react-native'
 import RestaurantCard from '../restaurantCard/RestaurantCard'
+import sanityClient from '../../sanity'
 
 const FeaturedRow = ({ id, title, description }) => {
+  const [loading, setLoading] = useState(false)
+  const [restaurants, setRestaurants] = useState([])
+
+  useEffect(() => {
+    setLoading(true)
+    sanityClient
+      .fetch(
+        `
+        *[_type == 'featured' && _id == '${id}'] {
+          ...,
+          restaurant[]->{
+            ...,
+            dishes[]->,
+            type-> {
+              name
+            }
+          }
+        }[0]
+    `,
+        { id } // params
+      )
+      .then(data => {
+        setRestaurants(data?.restaurant)
+        setLoading(false)
+      })
+  }, [])
+
   return (
     <View>
       <View className='mt-4 flex-row items-center justify-between px-4'>
@@ -21,31 +49,27 @@ const FeaturedRow = ({ id, title, description }) => {
         className='pt-4'
       >
         {/* Restaurant Card.... */}
-        <RestaurantCard
-          id='123'
-          imgUrl='https://links.papareact.com/gn7'
-          title='Yo! Sushi'
-          rating={4.5}
-          genre='Japanese'
-          address='123 Main st.'
-          short_description='This is a test description'
-          dishes={[]}
-          long={72.897656}
-          lat={89.675467}
-        />
-
-        <RestaurantCard
-          id='123'
-          imgUrl='https://links.papareact.com/gn7'
-          title='Yo! Sushi'
-          rating={4.5}
-          genre='Japanese'
-          address='123 Main st.'
-          short_description='This is a test description'
-          dishes={[]}
-          long={72.897656}
-          lat={89.675467}
-        />
+        {loading ? (
+          <View className='flex-1 mt-10 justify-center items-center'>
+            <ActivityIndicator size='large' color='#00ccbb' />
+          </View>
+        ) : (
+          restaurants?.map(restaurant => (
+            <RestaurantCard
+              key={restaurant?._id}
+              id={restaurant?._id}
+              imgUrl={restaurant?.image}
+              address={restaurant?.address}
+              title={restaurant?.name}
+              rating={restaurant?.rating}
+              genre={restaurant?.type?.name}
+              short_description={restaurant?.short_description}
+              dishes={restaurant?.dishes}
+              long={restaurant?.long}
+              lat={restaurant?.lat}
+            />
+          ))
+        )}
       </ScrollView>
     </View>
   )
