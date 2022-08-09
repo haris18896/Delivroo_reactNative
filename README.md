@@ -38,6 +38,3 @@ it will run our app and will show us some information about our app, by `pressin
 › Press c │ show project QR
 
 › Press p │ toggle build mode (development)
-
----
----
