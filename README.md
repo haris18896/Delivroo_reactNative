@@ -1,51 +1,34 @@
-# Delivroo_reactNative : Placing Order Screen
+# Delivroo_reactNative
 
-The common components View, Text and Image are precomposed and exposed under the Animatable namespace. If you have your own component that you wish to animate, simply wrap it with a Animatable.View or compose it with:
+First of all we will have to install Expo Client on our machine so that we can use it to create hybrid apps.
 
-after that we are going to add `progress bar`
-```
-npm i react-native-animatable
-npm i react-native-progress
-```
-
-```js
-import { useNavigation } from '@react-navigation/native'
-import React, { useEffect } from 'react'
-import { SafeAreaView } from 'react-native'
-import * as Animatable from 'react-native-animatable'
-import * as Progress from 'react-native-progress'
-
-const PreparingOrderScreen = () => {
-  const navigation = useNavigation()
-
-  useEffect(() => {
-    setTimeout(() => {
-      navigation.navigate('Delivery')
-    }, 6000)
-  }, [])
-
-  return (
-    <SafeAreaView className='bg-[#fff] flex-1 justify-center items-center'>
-      <Animatable.Image
-        source={require('../../assets/images/mobile.gif')}
-        animation='slideInUp'
-        iterationCount={1}
-        className='h-96 w-96'
-      />
-      <Animatable.Text animation='slideInUp' iterationCount={1} className='text-lg text-[#00ccbb] font-bold text-center'>
-        Waiting for Restaurant to accept Order!
-      </Animatable.Text>
-
-      <Progress.Circle className='mt-10' size={60} indeterminate={true} color='#00ccbb' />
-    </SafeAreaView>
-  )
-}
-
-export default PreparingOrderScreen
+```ssh
+npm install -g expo-cli
+npm i gitmoji-cli
 ```
 
-After that we are going to add `ReactNative Maps` [MapView: ReactNative Maps](https://docs.expo.dev/versions/latest/sdk/map-view/)
+after that we are going to generate a template or our startup app using expo-cli. 
 
-```
-npm i react-native-maps
-```
+`npx create-expo-app <app name>`
+
+to run our app we will use `expo start` command.
+
+it will run our app and will show us some information about our app, by `pressing ?` it will show us all the options and devices to run our app on.
+
+
+› Press a │ open Android // connect to android device
+› shift+a │ select a device or emulator
+› Press i │ open iOS simulator // Xcode needs to be installed
+› shift+i │ select a simulator
+› Press w │ open web
+
+› Press r │ reload app
+› Press m │ toggle menu
+› shift+m │ more tools
+› Press j │ open JavaScript inspector for Hermes
+› Press o │ open project code in your editor
+› Press c │ show project QR
+› Press p │ toggle build mode (development)
+
+---
+---
