@@ -43,3 +43,9 @@ const PreparingOrderScreen = () => {
 
 export default PreparingOrderScreen
 ```
+
+After that we are going to add `ReactNative Maps` [MapView: ReactNative Maps](https://docs.expo.dev/versions/latest/sdk/map-view/)
+
+```
+npm i react-native-maps
+```
