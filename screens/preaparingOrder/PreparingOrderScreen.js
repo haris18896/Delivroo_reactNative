@@ -1,14 +1,3 @@
-# Delivroo_reactNative : Placing Order Screen
-
-The common components View, Text and Image are precomposed and exposed under the Animatable namespace. If you have your own component that you wish to animate, simply wrap it with a Animatable.View or compose it with:
-
-after that we are going to add `progress bar`
-```
-npm i react-native-animatable
-npm i react-native-progress
-```
-
-```js
 import { useNavigation } from '@react-navigation/native'
 import React, { useEffect } from 'react'
 import { SafeAreaView } from 'react-native'
@@ -42,4 +31,3 @@ const PreparingOrderScreen = () => {
 }
 
 export default PreparingOrderScreen
-```
